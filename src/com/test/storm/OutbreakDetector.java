@@ -1,0 +1,30 @@
+package com.test.storm;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import storm.trident.operation.BaseFunction;
+import storm.trident.operation.TridentCollector;
+import storm.trident.tuple.TridentTuple;
+
+public class OutbreakDetector extends BaseFunction {
+
+	private static final long serialVersionUID=1L;
+	
+	public static final int THRESHOLD=1000;
+	@Override
+	public void execute(TridentTuple paramTridentTuple,
+			TridentCollector paramTridentCollector) {
+		// TODO Auto-generated method stub
+		String key=(String)paramTridentTuple.getValue(0);
+		Long count=(Long)paramTridentTuple.getValue(1);
+		if(count>THRESHOLD)
+		{
+			List<Object> values=new ArrayList<Object>();
+			values.add("test:"+key);
+			System.out.println("OutbreakDetector:"+key);
+			paramTridentCollector.emit(values);
+		}
+	}
+
+}
